@@ -1,0 +1,78 @@
+<div metal:use-macro="load: layout.pt">
+    <div metal:fill-slot="content">
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Edit Quotation</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Edit Quotation
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <form id="exerciseForm" class="form-horizontal" action="/quotation/create" method="post" role="form">
+                                        <div class="form-group">
+                                            <label class="col-xs-2 control-label">Quotation Number</label>
+                                            <div class="col-xs-6">
+                                              <input name="qt_number" class="form-control" value="${qt_number}">
+                                            </div>
+                                            <div class="col-xs-5 messageContainer"></div>  
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-xs-2 control-label">Description</label>
+                                            <div class="col-xs-6">
+                                              <input name="description" class="form-control">
+                                            </div>
+                                            <div class="col-xs-5 messageContainer"></div>  
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-xs-2 control-label">Test Script</label>
+                                            <div class="col-xs-6">
+                                              <textarea name="test_code" class="form-control" rows="4"></textarea>
+                                            </div>
+                                            <div class="col-xs-5 messageContainer"></div>  
+                                            <p class="help-block">Script used to test student's code</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-xs-2 control-label">Hints</label>
+                                            <div class="col-xs-6">
+                                              <textarea name="hints" class="form-control" rows="4"></textarea>
+                                            </div>
+                                            <div class="col-xs-5 messageContainer"></div>  
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-xs-2 control-label">Code Template</label>
+                                            <div class="col-xs-6">
+                                              <textarea name="template" class="form-control" rows="4" placeholder="Optional"></textarea>
+                                            </div>
+                                            <div class="col-xs-5 messageContainer"></div>
+                                            <p class="help-block">Script used to test student's code</p>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-xs-9 col-xs-offset-2">
+                                                <button type="submit" class="btn btn-default">Create</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+    </div>
+</div>
