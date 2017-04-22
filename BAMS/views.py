@@ -1,7 +1,9 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 
-@view_config(route_name='home', renderer='templates/quotation_list.pt')
+# @view_config(route_name='home', renderer='templates/status_tables.pt')
+# @view_config(route_name='home', renderer='templates/new_quotation.pt')
+@view_config(route_name='home', renderer='templates/index.pt')
 def my_view(request):
     # get all quotations from database
     quotations = []
@@ -10,7 +12,8 @@ def my_view(request):
       quotations.append(quotation)
     return {'quotations': quotations}
 
-@view_config(route_name='quotation_new', renderer='templates/new_form.pt')
+# @view_config(route_name='quotation_new', renderer='templates/new_form.pt')
+@view_config(route_name='quotation_new', renderer='templates/new_quotation.pt')
 def quotation_new(request):
   return {}
 
