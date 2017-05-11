@@ -28,7 +28,11 @@
     <link href="${request.static_url('BAMS:static/jqvmap/dist/jqvmap.min.css')}" rel="stylesheet"/>
     <!-- bootstrap-daterangepicker -->
     <link href="${request.static_url('BAMS:static/bootstrap-daterangepicker/daterangepicker.css')}" rel="stylesheet">
-
+    <!-- Datatables -->
+    <link href="${request.static_url('BAMS:static/datatables.net-bs/css/dataTables.bootstrap.min.css')}" rel="stylesheet">
+    <link href="${request.static_url('BAMS:static/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css')}" rel="stylesheet">
+    <!-- Custom Theme Style -->
+    <link href="${request.static_url('BAMS:static/custom.min.css')}" rel="stylesheet">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -49,12 +53,8 @@
 
             <!-- menu profile quick info -->
             <div class="profile clearfix">
-<!--               <div class="profile_pic">
-                <img src="images/img.jpg" alt="..." class="img-circle profile_img">
-              </div> -->
               <div class="profile_info">
-                <span>Welcome,</span>
-                <h2>Shiwen</h2>
+                <span>Welcome, <b>Delu Wang</b></span>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -66,24 +66,17 @@
               <div class="menu_section">
                 <h3>General</h3>
                 <ul class="nav side-menu">
-                  <li><a><i class="fa fa-home"></i> View <span class="fa fa-chevron-down"></span></a>
+                  <li><a href="/quotation/new"><i class="fa fa-edit"></i>New Quotation</a>
+                  </li>
+                  <li><a><i class="fa fa-table"></i> View <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="index.html">Quotation Summary</a></li>
-                      <li><a href="index2.html">DO Summary</a></li>
-                      <li><a href="index3.html">Invoice Summary</a></li>
+                      <li><a href="/quotation/summary">Quotation Summary</a></li>
+                      <li><a href="/DO/summary">DO Summary</a></li>
+                      <li><a href="/invoice/summary">Invoice Summary</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="form.html">General Form</a></li>
-                      <li><a href="form_advanced.html">Advanced Components</a></li>
-                      <li><a href="form_validation.html">Form Validation</a></li>
-                      <li><a href="form_wizards.html">Form Wizard</a></li>
-                      <li><a href="form_upload.html">Form Upload</a></li>
-                      <li><a href="form_buttons.html">Form Buttons</a></li>
-                    </ul>
+                  <li><a><i class="fa fa-wrench"></i> Settings</a>
                   </li>
-                  <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a></li>
                 </ul>
               </div>
 
@@ -93,7 +86,7 @@
             <!-- /menu footer buttons -->
             <div class="sidebar-footer hidden-small">
               <a data-toggle="tooltip" data-placement="top" title="Settings">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                <span class="fa fa-wrench" aria-hidden="true"></span>
               </a>
               <a data-toggle="tooltip" data-placement="top" title="FullScreen">
                 <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
@@ -120,17 +113,12 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="images/img.jpg" alt="">Shiwen
+                    Delu Wang
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
                     <li><a href="javascript:;"> Profile</a></li>
-                    <li>
-                      <a href="javascript:;">
-                        <span class="badge bg-red pull-right">50%</span>
-                        <span>Settings</span>
-                      </a>
-                    </li>
+                    <li><a href="javascript:;"> Settings</a></li>
                     <li><a href="javascript:;">Help</a></li>
                     <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                   </ul>
@@ -204,7 +192,7 @@
             </nav>
           </div>
         </div>
-        <div class="right_col">
+        <div class="right_col" role="main">
           <div metal:define-slot="content">No content</div>
         </div>
 
@@ -239,5 +227,20 @@
     <script src="${request.static_url('BAMS:static/moment/min/moment.min.js')}"></script>
     <script src="${request.static_url('BAMS:static/bootstrap-daterangepicker/daterangepicker.js')}"></script>
     <script src="${request.static_url('BAMS:static/theme.min.js')}"></script>
+    <!-- Datatables -->
+    <script src="${request.static_url('BAMS:static/datatables.net/js/jquery.dataTables.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-bs/js/dataTables.bootstrap.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-buttons/js/dataTables.buttons.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-buttons/js/buttons.flash.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-buttons/js/buttons.html5.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-buttons/js/buttons.print.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-keytable/js/dataTables.keyTable.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-responsive/js/dataTables.responsive.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-responsive-bs/js/responsive.bootstrap.js')}"></script>
+    <script src="${request.static_url('BAMS:static/jszip/dist/jszip.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/pdfmake/build/pdfmake.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/pdfmake/build/vfs_fonts.js')}"></script>
   </body>
 </html>

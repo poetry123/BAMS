@@ -17,6 +17,18 @@ def my_view(request):
 def quotation_new(request):
   return {}
 
+@view_config(route_name='quotation_summary', renderer='templates/quotation_summary.pt')
+def quotation_summary(request):
+  return {}
+
+@view_config(route_name='DO_summary', renderer='templates/DO_summary.pt')
+def DO_summary(request):
+  return {}
+
+@view_config(route_name='invoice_summary', renderer='templates/invoice_summary.pt')
+def invoice_summary(request):
+  return {}
+
 @view_config(route_name='quotation_edit', renderer='templates/edit_form.pt')
 def quotation_edit(request):
   quotation_no = request.matchdict['quotation_no']
