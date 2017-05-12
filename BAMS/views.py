@@ -29,6 +29,10 @@ def DO_summary(request):
 def invoice_summary(request):
   return {}
 
+@view_config(route_name='settings', renderer='templates/settings.pt')
+def settings(request):
+  return {}
+
 @view_config(route_name='quotation_edit', renderer='templates/edit_form.pt')
 def quotation_edit(request):
   quotation_no = request.matchdict['quotation_no']

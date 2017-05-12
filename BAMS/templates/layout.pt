@@ -54,7 +54,7 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_info">
-                <span>Welcome, <b>Delu Wang</b></span>
+                <span>Welcome, <b>Wang Delu</b></span>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -75,7 +75,7 @@
                       <li><a href="/invoice/summary">Invoice Summary</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-wrench"></i> Settings</a>
+                  <li><a href="/settings"><i class="fa fa-wrench"></i> Settings</a>
                   </li>
                 </ul>
               </div>
@@ -113,7 +113,7 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    Delu Wang
+                    Wang Delu
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
