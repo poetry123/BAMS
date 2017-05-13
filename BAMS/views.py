@@ -15,11 +15,17 @@ def my_view(request):
 # @view_config(route_name='quotation_new', renderer='templates/new_form.pt')
 @view_config(route_name='quotation_new', renderer='templates/new_quotation.pt')
 def quotation_new(request):
-  return {}
+  quotation_validity = 30
+  delivery = 30
+  payment = 30
+  return {'quotation_validity':quotation_validity, 'delivery':delivery, 'payment':payment}
 
 @view_config(route_name='quotation_summary', renderer='templates/quotation_summary.pt')
 def quotation_summary(request):
-  return {}
+  quotation_collection = request.db['quotations']
+  quotations = quotation_collection.find()
+  print (quotations)
+  return {'quotations': quotations}
 
 @view_config(route_name='DO_summary', renderer='templates/DO_summary.pt')
 def DO_summary(request):
@@ -43,6 +49,7 @@ def quotation_edit(request):
 def create_quotation(request):
   if request.method == 'POST':
     quotation = request.POST
-    print(quotation)
+    quotation_collection = request.db['quotations']
+    quotation_collection.insert_one(quotation)
     # Save to mongodb
     return HTTPFound(location='/')

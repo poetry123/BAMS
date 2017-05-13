@@ -1,11 +1,6 @@
 from pyramid.config import Configurator
 
-try:
-    # for python 2
-    from urlparse import urlparse
-except ImportError:
-    # for python 3
-    from urllib.parse import urlparse
+from urllib.parse import urlparse
 
 from gridfs import GridFS
 from pymongo import MongoClient
@@ -14,10 +9,9 @@ def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
     """
     config = Configurator(settings=settings)
-    '''for MongoDB
-    '''
-    config.add_static_view('static', 'static', cache_max_age=3600)
-
+    # '''for MongoDB
+    # '''
+    #
     db_url = urlparse(settings['mongo_uri'])
     config.registry.db = MongoClient(
         host=db_url.hostname,
@@ -32,7 +26,7 @@ def main(global_config, **settings):
 
     def add_fs(request):
         return GridFS(request.db)
-
+    #
     config.add_request_method(add_db, 'db', reify=True)
     config.add_request_method(add_fs, 'fs', reify=True)
 
