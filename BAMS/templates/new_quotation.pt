@@ -1,4 +1,25 @@
-<div metal:use-macro="load: layout.pt">
+<metal:macro use-macro="load: layout.pt">
+  <metal:slot metal:fill-slot="script">
+    <script>
+      $(document).ready( function() {
+      $('#add').on('click', function(e) {
+      var $this = $(this);
+      var $newRow = $this.closest('table').find('tr:first').clone();
+      $newRow.find(':input').val('');
+      $newRow.find(':input').eq(2).val('1');
+      $newRow.find(':input').eq(3).val('0');
+      $newRow.find(':input').eq(4).val('Delete');
+      $newRow.append('<td><input type="button" class="removebutton" value="Delete"></td>');
+      $newRow.insertBefore($this.parent());
+
+      $('input.removebutton').on('click', function() {
+      $(this).closest("tr").remove();
+      return false;
+    });
+    });
+    });
+    </script>
+  </metal:slot>
   <div metal:fill-slot="content">
 
     <div class="row">
@@ -14,7 +35,7 @@
             </div>
             <div class="x_content">
               <br />
-              <form class="form-horizontal form-label-left">
+              <form class="form-horizontal form-label-left" action="/quotation/create" method="post" role="form">
                 <div class="row">
                   <div class="col-md-6 col-xs-12">
                     <div class="x_content">
@@ -23,37 +44,37 @@
                         <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">Company Name:</label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control">
+                            <input name="company_name" type="text" class="form-control">
                           </div>
                         </div>
                         <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">Department:</label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control">
+                            <input name="department" type="text" class="form-control">
                           </div>
                         </div>
                         <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">Order Address:</label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
-                            <textarea class="form-control" rows="3" ></textarea>
+                            <textarea name="order_address" class="form-control" rows="3" ></textarea>
                           </div>
                         </div>
                         <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">Tel: </label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control">
+                            <input name="tel" type="text" class="form-control">
                           </div>
                         </div>
                         <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">Email:</label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" class="form-control">
+                            <input name="email" type="email" class="form-control">
                           </div>
                         </div>
                         <div class="form-group">
                           <label class="control-label col-md-3 col-sm-3 col-xs-12">Order People:</label>
                           <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text"  class= "form-control"/>
+                            <input type="text" name="order_people" class= "form-control"/>
                           </div>
                         </div>
                     </div>
@@ -84,12 +105,37 @@
                    </div>
                  </div>
                 </div>
+                <table id="item_table">
+                  <tr>
+                    <td>
+                      <input type="text" name="item_no[]" placeholder="item number" />
+                    </td>
+                    <td>
+                      <input type="text" name="item_description[]" placeholder="item description" />
+                    </td>
+                    <td>
+                      <input type="number" value="1" name="item_quantity[]">
+                    </td>
+                    <td>
+                      <input type="number" name="item_unit_price[]" value="0" />
+                    </td>
+
+
+
+                  </tr>
+                  <tr>
+                    <td colspan="2"  id="add"><a href="#">
+                        + Add new item</a>
+                    </td>
+                  </tr>
+                </table>
+
                 <div class="row">
                     <div class="form-group">
                           <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-9">
                             <button type="button" class="btn btn-primary">Cancel</button>
                             <button class="btn btn-primary" type="reset">Reset</button>
-                            <button type="submit" class="btn btn-success">Preview</button>
+                            <button type="submit" class="btn btn-success">Create</button>
                           </div>
                         </div>
                 </div>
@@ -99,4 +145,4 @@
     </div>
   </div>
  </div>
-</div>
+</metal:macro>

@@ -13,23 +13,23 @@
                     <table id="datatable-buttons" class="table table-striped table-bordered" style="font-size:13px">
                       <thead>
                         <tr>
-                          <th>Name</th>
-                          <th>Position</th>
-                          <th>Office</th>
-                          <th>Age</th>
-                          <th>Start date</th>
-                          <th>Salary</th>
+                          <th>Company Name</th>
+                          <th>Department</th>
+                          <th>Order Address</th>
+                          <th>Tel</th>
+                          <th>Email</th>
+                          <th>Order People</th>
                         </tr>
                       </thead>
 
                       <tbody>
                         <tr tal:repeat="quotation quotations">
-                        <td>${quotation.name}</td>
-                        <td>${quotation.position}</td>
-                        <td>${quotation.office}</td>
-                        <td>${quotation.age}</td>
-                        <td>${quotation.start_date}</td>
-                        <td>$ ${quotation.salary}</td>
+                        <td>${quotation.company_name}</td>
+                        <td>${quotation.department}</td>
+                        <td>${quotation.order_address}</td>
+                        <td>${quotation.tel}</td>
+                        <td>${quotation.email}</td>
+                        <td>${quotation.order_people}</td>
                       </tr>
                       </tbody>
                     </table>
