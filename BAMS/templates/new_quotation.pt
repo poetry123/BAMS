@@ -4,7 +4,8 @@
       $(document).ready( function() {
       $('#add').on('click', function(e) {
       var $this = $(this);
-      var $newRow = $this.closest('table').find('tr:first').clone();
+      <!-- var $newRow = $this.closest('table').find('tr:nth-child(2)').clone(); -->
+      var $newRow = $this.closest('tbody').find('tr:first').clone();
       $newRow.find(':input').val('');
       $newRow.find(':input').eq(2).val('1');
       $newRow.find(':input').eq(3).val('0');
@@ -37,6 +38,7 @@
               <br />
               <form class="form-horizontal form-label-left" action="/quotation/create" method="post" role="form">
                 <div class="row">
+                  <!-- client info -->
                   <div class="col-md-6 col-xs-12">
                     <div class="x_content">
                         <h2>Client Info: </h2>
@@ -79,6 +81,7 @@
                         </div>
                     </div>
                   </div>
+                  <!-- Terms of quotation -->
                   <div class="col-md-6 col-xs-12">
                     <div class="x_content">
                       <h2>Terms of Quotation: </h2>
@@ -105,31 +108,51 @@
                    </div>
                  </div>
                 </div>
-                <table id="item_table">
-                  <tr>
-                    <td>
-                      <input type="text" name="item_no[]" placeholder="item number" />
-                    </td>
-                    <td>
-                      <input type="text" name="item_description[]" placeholder="item description" />
-                    </td>
-                    <td>
-                      <input type="number" value="1" name="item_quantity[]">
-                    </td>
-                    <td>
-                      <input type="number" name="item_unit_price[]" value="0" />
-                    </td>
+                <br />
+                <!-- ordered item table -->
+                <div class="row">
+                  <div class="col-md-12 col-xs-12">
+                    <div class="x_content">
+                      <h2>Ordered Item List:</h2>
+                      <div class="ln_solid"></div>
+                      <table id="item_table" class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <td>Item Number</td>
+                            <td>Description</td>
+                            <td>Quantity</td>
+                            <td>Unit Price</td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <input type="text" name="item_no[]" />
+                            </td>
+                            <td>
+                              <input type="text" name="item_description[]"/>
+                            </td>
+                            <td>
+                              <input type="number" value="1" name="item_quantity[]">
+                            </td>
+                            <td>
+                              <label for="unit_price">S$</label>
+                              <input type="number" id="unit_price" name="item_unit_price[]" value="0" />
+                            </td>
+                          </tr>
+                          <tr>
+                            <td colspan="2"  id="add"><a href="#">
+                                + Add new item</a>
+                            </td>
+                          </tr>
+                        </tbody>
 
+                      </table>
+                    </div>
+                  </div>
+                </div>
 
-
-                  </tr>
-                  <tr>
-                    <td colspan="2"  id="add"><a href="#">
-                        + Add new item</a>
-                    </td>
-                  </tr>
-                </table>
-
+                <!-- buttons -->
                 <div class="row">
                     <div class="form-group">
                           <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-9">
