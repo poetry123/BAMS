@@ -1,4 +1,22 @@
 <div metal:use-macro="load: layout.pt">
+   <metal:slot metal:fill-slot="css">
+    <link href="${request.static_url('BAMS:static/datatables.net-bs/css/dataTables.bootstrap.min.css')}" rel="stylesheet">
+    <link href="${request.static_url('BAMS:static/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css')}" rel="stylesheet">
+  </metal:slot>
+  <metal:slot metal:fill-slot="script">
+    <script src="${request.static_url('BAMS:static/moment/min/moment.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net/js/jquery.dataTables.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-bs/js/dataTables.bootstrap.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-buttons/js/dataTables.buttons.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-buttons/js/buttons.flash.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-buttons/js/buttons.html5.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-buttons/js/buttons.print.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-keytable/js/dataTables.keyTable.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-responsive/js/dataTables.responsive.min.js')}"></script>
+    <script src="${request.static_url('BAMS:static/datatables.net-responsive-bs/js/responsive.bootstrap.js')}"></script>
+  </metal:slot>
   <div metal:fill-slot="content">
       <div class="x_panel">
                   <div class="x_title">
