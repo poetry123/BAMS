@@ -19,18 +19,28 @@
                           <th>Tel</th>
                           <th>Email</th>
                           <th>Order People</th>
+                          <th>Item Number</th>
+                          <th>Item Description</th>
+                          <th>Quantity</th>
+                          <th>Unit Price</th>
                         </tr>
                       </thead>
 
                       <tbody>
-                        <tr tal:repeat="quotation quotations">
-                        <td>${quotation.company_name}</td>
-                        <td>${quotation.department}</td>
-                        <td>${quotation.order_address}</td>
-                        <td>${quotation.tel}</td>
-                        <td>${quotation.email}</td>
-                        <td>${quotation.order_people}</td>
-                      </tr>
+                        <p tal:repeat="quotation quotations">
+                          <tr tal:repeat="item quotation['items']">
+                            <td>${quotation.company_name}</td>
+                            <td>${quotation.department}</td>
+                            <td>${quotation.order_address}</td>
+                            <td>${quotation.tel}</td>
+                            <td>${quotation.email}</td>
+                            <td>${quotation.addressee}</td>
+                            <td>${item.number}</td>
+                            <td>${item.description}</td>
+                            <td>${item.quantity}</td>
+                            <td>${item.unit_price}</td>
+                          </tr>
+                        </p>
                       </tbody>
                     </table>
                   </div>

@@ -1,5 +1,7 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
+import logging
+log = logging.getLogger(__name__)
 
 # @view_config(route_name='home', renderer='templates/status_tables.pt')
 # @view_config(route_name='home', renderer='templates/new_quotation.pt')
@@ -48,7 +50,29 @@ def quotation_edit(request):
 @view_config(route_name='quotation_create')
 def create_quotation(request):
   if request.method == 'POST':
-    quotation = request.POST
+    quotation_raw = request.POST
+    log.debug('Raw Quotation Data entered:' + str(quotation_raw))
+    quotation = dict()
+    quotation['company_name'] = quotation_raw['company_name']
+    quotation['department'] = quotation_raw['department']
+    quotation['order_address'] = quotation_raw['order_address']
+    quotation['tel'] = quotation_raw['tel']
+    quotation['email'] = quotation_raw['email']
+    quotation['addressee'] = quotation_raw['order_people']
+
+    items = []
+    item_nos = quotation_raw.getall('item_no[]')
+    item_descriptions = quotation_raw.getall('item_description[]')
+    item_quantities = quotation_raw.getall('item_quantity[]')
+    item_unit_prices = quotation_raw.getall('item_unit_price[]')
+    items_l = zip(item_nos, item_descriptions, item_quantities, item_unit_prices)
+    for i in items_l:
+        items.append({'number':i[0], 'description': i[1], 'quantity':i[2], 'unit_price':i[3]})
+
+    quotation['items'] = items
+
+    log.debug('Quotation Created:' + str(quotation))
+
     quotation_collection = request.db['quotations']
     quotation_collection.insert_one(quotation)
     # Save to mongodb
