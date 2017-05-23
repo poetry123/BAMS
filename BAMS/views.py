@@ -3,8 +3,6 @@ from pyramid.httpexceptions import HTTPFound
 import logging
 log = logging.getLogger(__name__)
 
-# @view_config(route_name='home', renderer='templates/status_tables.pt')
-# @view_config(route_name='home', renderer='templates/new_quotation.pt')
 @view_config(route_name='home', renderer='templates/index.pt')
 def my_view(request):
     # get all quotations from database
@@ -14,7 +12,6 @@ def my_view(request):
       quotations.append(quotation)
     return {'quotations': quotations}
 
-# @view_config(route_name='quotation_new', renderer='templates/new_form.pt')
 @view_config(route_name='quotation_new', renderer='templates/new_quotation.pt')
 def quotation_new(request):
   quotation_validity = 30
@@ -22,20 +19,12 @@ def quotation_new(request):
   payment = 30
   return {'quotation_validity':quotation_validity, 'delivery':delivery, 'payment':payment}
 
-@view_config(route_name='quotation_summary', renderer='templates/quotation_summary.pt')
+@view_config(route_name='summary', renderer='templates/summary.pt')
 def quotation_summary(request):
   quotation_collection = request.db['quotations']
   quotations = quotation_collection.find()
   print (quotations)
   return {'quotations': quotations}
-
-@view_config(route_name='DO_summary', renderer='templates/DO_summary.pt')
-def DO_summary(request):
-  return {}
-
-@view_config(route_name='invoice_summary', renderer='templates/invoice_summary.pt')
-def invoice_summary(request):
-  return {}
 
 @view_config(route_name='settings', renderer='templates/settings.pt')
 def settings(request):

@@ -2,7 +2,7 @@
   <div metal:fill-slot="content">
       <div class="x_panel">
                   <div class="x_title">
-                    <h2>Quotation Summary</h2>
+                    <h2>Order Summary</h2>
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -18,7 +18,7 @@
                           <th>Order Address</th>
                           <th>Tel</th>
                           <th>Email</th>
-                          <th>Order People</th>
+                          <th>Ordered By</th>
                           <th>Item Number</th>
                           <th>Item Description</th>
                           <th>Quantity</th>
