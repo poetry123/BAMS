@@ -19,8 +19,8 @@
     <link href="${request.static_url('BAMS:static/custom.css')}" rel="stylesheet">
 
     <script src="//oss.maxcdn.com/libs/jquery/1.10.2/jquery.min.js"></script>
-    <metal:slot metal:define-slot="script" />
     <script src="//oss.maxcdn.com/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <metal:slot metal:define-slot="script" />
     <script src="${request.static_url('BAMS:static/custom.js')}"></script>
   </head>
   <body class="nav-md">

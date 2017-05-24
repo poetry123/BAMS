@@ -20,10 +20,10 @@ class ViewTests(unittest.TestCase):
 class FunctionalTests(unittest.TestCase):
     def setUp(self):
         from BAMS import main
-        app = main({})
+        app = main({}, mongo_uri='mongodb://localhost:27017/bams')
         from webtest import TestApp
         self.testapp = TestApp(app)
 
     def test_root(self):
         res = self.testapp.get('/', status=200)
-        self.assertTrue(b'Pyramid' in res.body)
+        self.assertTrue(b'BAMS' in res.body)

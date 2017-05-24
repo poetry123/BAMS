@@ -1,23 +1,35 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
+from forex_python.converter import CurrencyRates
+
 import logging
+
 log = logging.getLogger(__name__)
+
+c = CurrencyRates()
+
+currency_codes = ['EUR','IDR','BGN','ILS','GBP','DKK','CAD','JPY','HUF',\
+                  'RON','MYR','SEK','SGD','HKD','AUD','CHF','KRW','CNY',\
+                  'TRY','HRK','NZD','THB','USD','NOK','RUB','INR','MXN',\
+                  'CZK','BRL','PLN','PHP','ZAR']
 
 @view_config(route_name='home', renderer='templates/index.pt')
 def my_view(request):
-    # get all quotations from database
-    quotations = []
-    for i in range(5):
-      quotation = {'quotation_no': (i+1)*1000}
-      quotations.append(quotation)
-    return {'quotations': quotations}
+  # get all quotations from database
+
+  return {'project': 'BAMS'}
 
 @view_config(route_name='quotation_new', renderer='templates/new_quotation.pt')
 def quotation_new(request):
   quotation_validity = 30
   delivery = 30
   payment = 30
-  return {'quotation_validity':quotation_validity, 'delivery':delivery, 'payment':payment}
+
+  currency_rate = dict()
+  for code in currency_codes:
+    rate = 1 if code == 'SGD' else c.get_rate(code, 'SGD')
+    currency_rate[code] = rate
+  return {'quotation_validity':quotation_validity, 'delivery':delivery, 'payment':payment, 'currency_rate':currency_rate}
 
 @view_config(route_name='summary', renderer='templates/summary.pt')
 def quotation_summary(request):
@@ -50,13 +62,16 @@ def create_quotation(request):
     quotation['addressee'] = quotation_raw['order_people']
 
     items = []
-    item_nos = quotation_raw.getall('item_no[]')
-    item_descriptions = quotation_raw.getall('item_description[]')
-    item_quantities = quotation_raw.getall('item_quantity[]')
-    item_unit_prices = quotation_raw.getall('item_unit_price[]')
-    items_l = zip(item_nos, item_descriptions, item_quantities, item_unit_prices)
+
+    items_l = zip(quotation_raw.getall('item_number'), quotation_raw.getall('item_description'), \
+                  quotation_raw.getall('item_quantity'), quotation_raw.getall('item_unit_price'), \
+                  quotation_raw.getall('item_currency'), quotation_raw.getall('item_rate'), \
+                  quotation_raw.getall('offset'))
+
     for i in items_l:
-        items.append({'number':i[0], 'description': i[1], 'quantity':i[2], 'unit_price':i[3]})
+      items.append({'number':i[0],      'description': i[1], 'quantity':i[2], \
+                    'unit_price':i[3], 'currency':i[4],     'convert_rate':i[5], \
+                    'offset':i[6]})
 
     quotation['items'] = items
 

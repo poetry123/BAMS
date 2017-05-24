@@ -1,186 +1,212 @@
 <metal:macro use-macro="load: layout.pt">
-  <metal:slot metal:fill-slot="script">
-    <script>
-      $(document).ready( function() {
-      $('#add').on('click', function(e) {
-        var $this = $(this);
-
-        var $newRow = $this.closest('tbody').find('tr:first').clone();
-        $newRow.find(':input').val('');
-        $newRow.find(':input').eq(2).val('1');
-        $newRow.find(':input').eq(3).val('0');
-        $newRow.find(':input').eq(4).val('Delete');
-        $newRow.append('<td><input type="button" class="removebutton" value="Delete"></td>');
-        $newRow.insertBefore($('#sum').parent());
-
-        $('input.removebutton').on('click', function() {
-        $(this).closest("tr").remove();
-        return false;
-
+<metal:slot metal:fill-slot="script">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+<script>
+  var $rates = ${currency_rate};
+  function schedule_rate(e){
+    $rate = $rates[this.options[this.selectedIndex].text];
+    $(this).parent().parent().siblings().find('input[name=item_rate]').val($rate);
+  };
+  $(document).ready(function() {
+    $('#add_item').on('click', function(e) {
+      var $this = $(this);
+      var $newDiv = $this.parent().find('.x_panel:last').clone();
+      $newDiv.find(':input[type=text]').val('');
+      $newDiv.find('input[type=number]').val('1');
+      $newDiv.find('input[name=item_offset]').val('0');
+      if ($newDiv.find('.removebutton').length <= 0) {
+        $newDiv.append('<button type="button" class="btn btn-danger removebutton">Delete</button>');
+      };
+      $newDiv.inertBefore($this);
+      $(".removebutton").on("click", function() {
+        var a = $(this).closest(".x_panel"),
+        c = a.find(".x_content");
+        c.slideToggle(200, function() {
+          a.remove();
+        });
+      });
     });
+    $.validate({
+      lang: 'en'
     });
-    });
-    </script>
-  </metal:slot>
-  <div metal:fill-slot="content">
-
-    <div class="row">
-        <div class="col-md-12 col-sm-12 col-xs-12">
-          <div class="x_panel">
-            <div class="x_title">
-              <h2>New Quotation </h2>
-              <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                </li>
-              </ul>
-              <div class="clearfix"></div>
+  });
+</script>
+</metal:slot>
+<div metal:fill-slot="content">
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <h2>New Quotation </h2>
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+          </li>
+        </ul>
+        <div class="clearfix"></div>
+      </div>
+      <div class="x_content">
+        <form class="form-horizontal form-label-left" action="/quotation/create" method="post" role="form">
+          <div class="row">
+            <!-- client info -->
+            <div class="col-md-12 col-xs-12">
+              <div class="x_content">
+                <h2>Client Info: </h2>
+                <div class="ln_solid"></div>
+                <div class="col-md-12 col-sm-12 col-xs-12 row">
+                  <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Company Name:</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <input name="company_name" type="text" class="form-control" data-validation="required">
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Ordered By:</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <input type="text" name="order_people" class= "form-control" data-validation="required">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12 row">
+                  <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Department:</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <input name="department" type="text" class="form-control" data-validation="required">
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Tel: </label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <input name="tel" type="text" class="form-control" data-validation="custom" data-validation-regexp="^(\(?\+?[0-9]*\)?)?[0-9\- ]+$" data-validation-error-msg="You have not given a correct phone number">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-xs-12 row">
+                  <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Order Address:</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <textarea name="order_address" class="form-control" rows="3"  data-validation="required"></textarea>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Email:</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <input name="email" type="email" class="form-control" data-validation="email">
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="x_content">
-              <form class="form-horizontal form-label-left" action="/quotation/create" method="post" role="form">
-                <div class="row">
-                  <!-- client info -->
-                  <div class="col-md-12 col-xs-12">
-                    <div class="x_content">
-                        <h2>Client Info: </h2>
-                        <div class="ln_solid"></div>
-                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Company Name:</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input name="company_name" type="text" class="form-control">
-                          </div>
-                        </div>
-                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Ordered By:</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" name="order_people" class= "form-control"/>
-                          </div>
-                        </div>
-                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Department:</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input name="department" type="text" class="form-control">
-                          </div>
-                        </div>
-                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Tel: </label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input name="tel" type="text" class="form-control">
-                          </div>
-                        </div>
-                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Order Address:</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                            <textarea name="order_address" class="form-control" rows="3" ></textarea>
-                          </div>
-                        </div>
-                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
-                          <label class="control-label col-md-3 col-sm-3 col-xs-12">Email:</label>
-                          <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input name="email" type="email" class="form-control">
-                          </div>
-                        </div>
-                    </div>
+            <!-- Terms of quotation -->
+            <div class="col-md-12 col-xs-12">
+              <div class="x_content">
+                <h2>Terms of Quotation: </h2>
+                <div class="ln_solid"></div>
+                <div class="form-group col-md-4 col-sm-6 col-xs-12">
+                  <label class="control-label col-md-7 col-sm-8 col-xs-12">Quotation Validity (Days) :</label>
+                  <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input type="text" class="form-control" value="${quotation_validity}" data-validation="number">
                   </div>
-                  <!-- Terms of quotation -->
-                  <div class="col-md-12 col-xs-12">
-                    <div class="x_content">
-                      <h2>Terms of Quotation: </h2>
-                      <div class="ln_solid"></div>
-                      <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                        <label class="control-label col-md-7 col-sm-8 col-xs-12">Quotation Validity (Days) :</label>
-                        <div class="col-md-3 col-sm-3 col-xs-12">
-                          <input type="text" class="form-control" value="${quotation_validity}">
-                        </div>
-                      </div>
-                      <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                        <label class="control-label col-md-8 col-sm-8 col-xs-12">Maximum Days before Payment:</label>
-                        <div class="col-md-3 col-sm-3 col-xs-12">
-                          <input type="text" class="form-control" value="${payment}">
-                        </div>
-                      </div>
-
-                      <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                        <label class="control-label col-md-9 col-sm-8 col-xs-12">Maximum Days Allowed for Delivery:</label>
-                        <div class="col-md-3 col-sm-3 col-xs-12">
-                          <input type="text" class="form-control" value="${delivery}">
-                        </div>
-                      </div>
-                   </div>
-                 </div>
                 </div>
-                <br />
-                <!-- ordered item table -->
-                <div class="row">
-                  <div class="col-md-12 col-xs-12">
-                    <div class="x_content">
-                      <h2>Ordered Item List:</h2>
-                      <div class="ln_solid"></div>
-                      <table id="item_table" class="table table-bordered">
-                        <thead>
-                          <tr>
-                            <td class="col-md-3" >Item Number</td>
-                            <td class="col-md-5">Description</td>
-                            <td class="col-md-1">Quantity</td>
-                            <td class="col-md-3">Unit Price</td>
-                            <td class="col-md-1">Convert Rate</td>
-                            <td class="col-md-3">Total</td>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <input class="form-control" type="text" name="item_no[]" />
-                            </td>
-                            <td>
-                              <textarea rows="3" class="form-control" type="text" name="item_description[]"></textarea>
-                            </td>
-                            <td>
-                              <input style='width:100%' type="number" min="1" value="1" name="item_quantity[]">
-                            </td>
-                            <td>
-                              <label style='width:15%' for="unit_price">S$</label>
-                              <input style='width:82%' type="number" id="unit_price" name="item_unit_price[]" value="0" min="0"/>
-                            </td>
-                            <td>
-                              <input style='width:100%' class="form-control" type="number" value="1" step="0.01" name="item_rate[]">
-                            </td>
-                            <td>
-                              <label class="control-label">S$</label>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td >Total Price: </td>
-                            <td align="right" colspan="3" id="sum">
-                              <label for="unit_price">S$</label>
-                              <label id="total_price"></label>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td colspan="2"  id="add"><a href="#/">
-                                + Add new item</a>
-                            </td>
-                          </tr>
-                        </tbody>
-
-                      </table>
+                <div class="form-group col-md-4 col-sm-6 col-xs-12">
+                  <label class="control-label col-md-8 col-sm-8 col-xs-12">Maximum Days before Payment:</label>
+                  <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input type="text" class="form-control" value="${payment}" data-validation="number">
+                  </div>
+                </div>
+                <div class="form-group col-md-4 col-sm-6 col-xs-12">
+                  <label class="control-label col-md-9 col-sm-8 col-xs-12">Maximum Days Allowed for Delivery:</label>
+                  <div class="col-md-3 col-sm-3 col-xs-12">
+                    <input type="text" class="form-control" value="${delivery}" data-validation="number">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br />
+          <!-- ordered item table -->
+          <div class="row">
+            <div class="col-md-12 col-xs-12">
+              <div class="x_content">
+                <h2>Ordered Item List:</h2>
+                <div class="ln_solid"></div>
+                <div class="x_panel col-md-12 col-xs-12">
+                  <div class="x_content">
+                    <div class="col-md-12 col-xs-12">
+                      <div class="form-group col-md-6 col-xs-12">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Item Number:</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input name="item_number" type="text" class="form-control" data-validation="required">
+                        </div>
+                      </div>
+                      <div class="form-group col-md-6 col-xs-12">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Quantity:</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input style='width:100%' class="form-control" type="number" min="1" value="1" name="item_quantity">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-12 col-xs-12">
+                      <div class="form-group col-md-6 col-xs-12">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Description:</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <textarea rows="5" class="form-control" type="text" name="item_description" data-validation="required"></textarea>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-6 col-xs-12">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Unit Price:</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select name="item_currency" class="form-control col-md-3 col-sm-6 col-xs-12" style="width: 25%;float: right;" onchange="schedule_rate.call(this, event)">
+                            <p tal:repeat="code currency_rate.keys()">
+                              <p tal:condition="code=='SGD'">
+                                <option selected>${code}</option>
+                              </p>
+                              <p tal:condition="code!='SGD'">
+                                <option>${code}</option>
+                              </p>
+                            </p>
+                          </select>
+                          <input style="width: 70%" class="col-md-3 col-sm-6 col-xs-12 form-control" type="number" id="unit_price" name="item_unit_price" value="0" min="0"/>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-6 col-xs-12">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Convert Rate:</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input style='width:100%' class="form-control" type="number" value="1" step="any" name="item_rate">
+                        </div>
+                      </div>
+                      <div class="form-group col-md-6 col-xs-12" style="float: right">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Offset:</label>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+                          <input style='width:100%' class="form-control" type="number" value="0" step="any" name="item_offset">
+                        </div>
+                      </div>
+                      <div class="form-group col-md-9 col-xs-12" style="float: right;margin-top: 20">
+                        <label class="control-label col-md-7 col-sm-5 col-xs-12">Unit Price(Final):</label>
+                        <div class="col-md-5 col-sm-7 col-xs-12" style="float: right;">
+                          <label class="control-label" style="float: right;">S$0.00</label>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                <!-- buttons -->
-                <div class="row">
-                    <div class="form-group">
-                          <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-9">
-                            <button type="button" class="btn btn-primary">Cancel</button>
-                            <button class="btn btn-primary" type="reset">Reset</button>
-                            <button type="submit" class="btn btn-success">Create</button>
-                          </div>
-                        </div>
-                </div>
-          </form>
-        </div>
+                <button style="margin-top: 20" id="add_item" type="button" class="btn btn-primary">Add New Item</button>
+              </div>
+            </div>
+          </div>
+          <!-- buttons -->
+          <div class="row">
+            <div class="form-group">
+              <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-9">
+                <button type="button" class="btn btn-primary">Cancel</button>
+                <button class="btn btn-primary" type="reset">Reset</button>
+                <button type="submit" class="btn btn-success">Create</button>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
- </div>
+</div>
+</div>
 </metal:macro>

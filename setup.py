@@ -14,7 +14,8 @@ requires = [
     'pyramid_debugtoolbar',
     'waitress',
     'deform',
-    'pymongo'
+    'pymongo',
+    'forex-python'
 ]
 
 tests_require = [
