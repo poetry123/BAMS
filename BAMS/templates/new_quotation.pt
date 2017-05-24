@@ -4,8 +4,25 @@
 <script>
   var $rates = ${currency_rate};
   function schedule_rate(e){
-    $rate = $rates[this.options[this.selectedIndex].text];
-    $(this).parent().parent().siblings().find('input[name=item_rate]').val($rate);
+    var $rate = $rates[this.options[this.selectedIndex].text];
+    $(this).parent().parent().siblings().find('input[name=item_rate]').val($rate).focus();
+  };
+  function calculatePrice(){
+    var $item_div = $(this).closest('.x_panel');
+    var unit_price = parseFloat($item_div.find('input[name=item_unit_price]').val());
+    var rate = parseFloat($item_div.find('input[name=item_rate]').val());
+    var offset = parseFloat($item_div.find('input[name=item_offset]').val());
+    var quantity = parseInt($item_div.find('input[name=item_quantity]').val());
+    var $price_labl = $item_div.find('.new_price');
+    $price_labl.text('S$'+Number(((unit_price*rate)+offset)*quantity).toFixed(2));
+    getTotal();
+  };
+  function getTotal(){
+    var total = 0
+    $('.new_price').each(function(index, element) {
+      total = total + parseFloat($(element).text().substring(2))
+    });
+    $('#total_price').text('S$'+Number(total).toFixed(2));
   };
   $(document).ready(function() {
     $('#add_item').on('click', function(e) {
@@ -13,11 +30,13 @@
       var $newDiv = $this.parent().find('.x_panel:last').clone();
       $newDiv.find(':input[type=text]').val('');
       $newDiv.find('input[type=number]').val('1');
+      $newDiv.find('input[name=item_unit_price]').val('0');
       $newDiv.find('input[name=item_offset]').val('0');
+      $newDiv.find('.new_price').text('S$0.00');
       if ($newDiv.find('.removebutton').length <= 0) {
         $newDiv.append('<button type="button" class="btn btn-danger removebutton">Delete</button>');
       };
-      $newDiv.inertBefore($this);
+      $newDiv.insertBefore($this);
       $(".removebutton").on("click", function() {
         var a = $(this).closest(".x_panel"),
         c = a.find(".x_content");
@@ -38,10 +57,6 @@
       <div class="x_panel">
         <div class="x_title">
           <h2>New Quotation </h2>
-          <ul class="nav navbar-right panel_toolbox">
-            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-          </li>
-        </ul>
         <div class="clearfix"></div>
       </div>
       <div class="x_content">
@@ -141,7 +156,7 @@
                       <div class="form-group col-md-6 col-xs-12">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Quantity:</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <input style='width:100%' class="form-control" type="number" min="1" value="1" name="item_quantity">
+                          <input style='width:100%' class="form-control" type="number" min="1" value="1" name="item_quantity" data-validation="number" oninput="calculatePrice.call(this)">
                         </div>
                       </div>
                     </div>
@@ -165,25 +180,25 @@
                               </p>
                             </p>
                           </select>
-                          <input style="width: 70%" class="col-md-3 col-sm-6 col-xs-12 form-control" type="number" id="unit_price" name="item_unit_price" value="0" min="0"/>
+                          <input style="width: 70%" class="col-md-3 col-sm-6 col-xs-12 form-control" type="number" id="unit_price" name="item_unit_price" value="0" min="0" data-validation="number" data-validation-allowing="float" oninput="calculatePrice.call(this)" />
                         </div>
                       </div>
                       <div class="form-group col-md-6 col-xs-12">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Convert Rate:</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <input style='width:100%' class="form-control" type="number" value="1" step="any" name="item_rate">
+                          <input style='width:100%' class="form-control" type="number" value="1" step="any" name="item_rate" data-validation="number" data-validation-allowing="float" oninput="calculatePrice.call(this)" onfocus="calculatePrice.call(this)">
                         </div>
                       </div>
                       <div class="form-group col-md-6 col-xs-12" style="float: right">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Offset:</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                          <input style='width:100%' class="form-control" type="number" value="0" step="any" name="item_offset">
+                          <input style='width:100%' class="form-control" type="number" value="0" step="any" name="item_offset" data-validation="number" data-validation-allowing="float" oninput="calculatePrice.call(this)">
                         </div>
                       </div>
                       <div class="form-group col-md-9 col-xs-12" style="float: right;margin-top: 20">
                         <label class="control-label col-md-7 col-sm-5 col-xs-12">Unit Price(Final):</label>
                         <div class="col-md-5 col-sm-7 col-xs-12" style="float: right;">
-                          <label class="control-label" style="float: right;">S$0.00</label>
+                          <label class="control-label new_price" style="float: right;">S$0.00</label>
                         </div>
                       </div>
                     </div>
@@ -193,12 +208,22 @@
               </div>
             </div>
           </div>
+          <div class="row" style="margin-bottom: 30">
+            <div class="form-group">
+              <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-9">
+                <label class="control-label col-md-7 col-sm-5 col-xs-12">Subtotal:</label>
+                  <div class="col-md-5 col-sm-7 col-xs-12" >
+                    <label id="total_price" class="control-label" >S$0.00</label>
+                  </div>
+              </div>
+            </div>
+          </div>
           <!-- buttons -->
           <div class="row">
             <div class="form-group">
-              <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-9">
+              <div class="col-md-2 col-sm-2 col-xs-12 col-md-offset-10">
                 <button type="button" class="btn btn-primary">Cancel</button>
-                <button class="btn btn-primary" type="reset">Reset</button>
+                <!-- <button class="btn btn-primary" type="reset">Reset</button> -->
                 <button type="submit" class="btn btn-success">Create</button>
               </div>
             </div>
