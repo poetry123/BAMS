@@ -15,7 +15,8 @@ requires = [
     'waitress',
     'deform',
     'pymongo',
-    'forex-python'
+    'forex-python',
+    'arrow'
 ]
 
 tests_require = [

@@ -16,102 +16,33 @@
                       <thead>
                         <tr class="headings">
                           <th class="column-title">No.</th>
-                          <th class="column-title">Date </th>
+                          <th class="column-title">Date Created</th>
                           <th class="column-title">Company </th>
-                          <th class="column-title">Status</th>
-                          <th class="column-title no-link last"><span class="nobr">Action</span>
+                          <th class="column-title no-link last"><span class="nobr"></span>
                         </th>
                       </tr>
                     </thead>
 
                     <tbody>
-                      <tr class="even pointer">
-                        <td class=" ">121000040</td>
-                        <td class=" ">May 23, 2014 11:47:56 PM </td>
-                        <td class=" ">NUS</td>
-                        <td class=" ">Pending</td>
+                      <tr tal:repeat="quotation quotation_list">
+                        <td>${quotation.quotation_number}</td>
+                        <td>${quotation.time_created}</td>
+                        <td>${quotation.company_name}</td>
                         <td class=" last">
                           <!-- action button dropdown -->
                           <div class="btn-group">
                              <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-sm" type="button" aria-expanded="false">Actions <span class="caret"></span>
                              </button>
                              <ul role="menu" class="dropdown-menu">
+                               <li><a href="#">View</a>
+                                </li>
                                <li><a href="#">Edit</a>
-                               </li>
-                               <li><a href="#">View PDF</a>
                                </li>
                                <li><a href="#">Create DO</a>
                                </li>
                                <li class="divider"></li>
-                               <li><a href="#">Archive</a>
-                               </li>
-                             </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr class="odd pointer">
-                        <td class=" ">121000041</td>
-                        <td class=" ">May 23, 2014 11:47:56 PM </td>
-                        <td class=" ">NUS</td>
-                        <td class=" ">Pending</td>
-                        <td class=" last">
-                          <div class="btn-group">
-                             <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-sm" type="button" aria-expanded="false">Actions <span class="caret"></span>
-                             </button>
-                             <ul role="menu" class="dropdown-menu">
-                               <li><a href="#">Edit</a>
-                               </li>
                                <li><a href="#">View PDF</a>
                                </li>
-                               <li><a href="#">Create DO</a>
-                               </li>
-                               <li class="divider"></li>
-                               <li><a href="#">Archive</a>
-                               </li>
-                             </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr class="even pointer">
-                        <td class=" ">121000042</td>
-                        <td class=" ">May 23, 2014 11:47:56 PM </td>
-                        <td class=" ">NUS</td>
-                        <td class=" ">Pending</td>
-                        <td class=" last">
-                          <div class="btn-group">
-                             <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-sm" type="button" aria-expanded="false">Actions <span class="caret"></span>
-                             </button>
-                             <ul role="menu" class="dropdown-menu">
-                               <li><a href="#">Edit</a>
-                               </li>
-                               <li><a href="#">View PDF</a>
-                               </li>
-                               <li><a href="#">Create DO</a>
-                               </li>
-                               <li class="divider"></li>
-                               <li><a href="#">Archive</a>
-                               </li>
-                             </ul>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr class="odd pointer">
-                        <td class=" ">121000043</td>
-                        <td class=" ">May 23, 2014 11:47:56 PM </td>
-                        <td class=" ">NUS</td>
-                        <td class=" ">Pending</td>
-                        <td class=" ">
-                          <div class="btn-group">
-                             <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle btn-sm" type="button" aria-expanded="false">Actions <span class="caret"></span>
-                             </button>
-                             <ul role="menu" class="dropdown-menu">
-                               <li><a href="#">Edit</a>
-                               </li>
-                               <li><a href="#">View PDF</a>
-                               </li>
-                               <li><a href="#">Create DO</a>
-                               </li>
-                               <li class="divider"></li>
                                <li><a href="#">Archive</a>
                                </li>
                              </ul>

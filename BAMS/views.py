@@ -1,6 +1,7 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from forex_python.converter import CurrencyRates
+import arrow
 
 import logging
 
@@ -13,11 +14,26 @@ currency_codes = ['EUR','IDR','BGN','ILS','GBP','DKK','CAD','JPY','HUF',\
                   'TRY','HRK','NZD','THB','USD','NOK','RUB','INR','MXN',\
                   'CZK','BRL','PLN','PHP','ZAR']
 
+def getNextSequence(collection, name):
+  ret = collection.find_and_modify(query={"_id": name}, update={"$inc": {"seq": 1}}, new=True)
+  return ret['seq'];
+
 @view_config(route_name='home', renderer='templates/index.pt')
 def my_view(request):
+  quotation_collection = request.db['quotations']
+  cursor = quotation_collection.find()
+  quotations = []
+  for q in cursor:
+    time_created = arrow.get(q['time_created'])
+    year = time_created.year % 2000
+    q['quotation_number'] = 'QTN-%d%s' % (year, format(int(q['quotation_number']), '04d'))
+    q['time_created'] = time_created.humanize()
+    q['time_modified'] = arrow.get(q['time_modified']).humanize()
+    quotations.append(q)
   # get all quotations from database
-
-  return {'project': 'BAMS'}
+  for qq in quotations:
+    print(qq)
+  return {'project': 'BAMS', 'quotation_list': quotations}
 
 @view_config(route_name='quotation_new', renderer='templates/new_quotation.pt')
 def quotation_new(request):
@@ -35,7 +51,6 @@ def quotation_new(request):
 def quotation_summary(request):
   quotation_collection = request.db['quotations']
   quotations = quotation_collection.find()
-  print (quotations)
   return {'quotations': quotations}
 
 @view_config(route_name='settings', renderer='templates/settings.pt')
@@ -60,13 +75,22 @@ def create_quotation(request):
     quotation['tel'] = quotation_raw['tel']
     quotation['email'] = quotation_raw['email']
     quotation['addressee'] = quotation_raw['order_people']
+    quotation['quotation_validity'] = quotation_raw['quotation_validity']
+    quotation['delivery_days_allowed'] = quotation_raw['delivery_days_allowed']
+    quotation['payment_days_allowed'] = quotation_raw['payment_days_allowed']
+
+    current_time = arrow.now().timestamp
+    quotation['time_created'] = current_time
+    quotation['time_modified'] = current_time
+    quotation['status'] = 'quotation created'
+    quotation['quotation_number'] = getNextSequence(request.db['counters'], 'quotation_id')
 
     items = []
 
     items_l = zip(quotation_raw.getall('item_number'), quotation_raw.getall('item_description'), \
                   quotation_raw.getall('item_quantity'), quotation_raw.getall('item_unit_price'), \
                   quotation_raw.getall('item_currency'), quotation_raw.getall('item_rate'), \
-                  quotation_raw.getall('offset'))
+                  quotation_raw.getall('item_offset'))
 
     for i in items_l:
       items.append({'number':i[0],      'description': i[1], 'quantity':i[2], \

@@ -14,12 +14,15 @@
     var offset = parseFloat($item_div.find('input[name=item_offset]').val());
     var quantity = parseInt($item_div.find('input[name=item_quantity]').val());
     var $price_labl = $item_div.find('.new_price');
-    $price_labl.text('S$'+Number(((unit_price*rate)+offset)*quantity).toFixed(2));
+    var $subtotal_labl = $item_div.find('.sub-total');
+    var new_price = unit_price*rate+offset
+    $price_labl.text('S$'+Number(new_price).toFixed(2));
+    $subtotal_labl.text('S$'+Number(new_price*quantity).toFixed(2));
     getTotal();
   };
   function getTotal(){
     var total = 0
-    $('.new_price').each(function(index, element) {
+    $('.sub-total').each(function(index, element) {
       total = total + parseFloat($(element).text().substring(2))
     });
     $('#total_price').text('S$'+Number(total).toFixed(2));
@@ -33,6 +36,7 @@
       $newDiv.find('input[name=item_unit_price]').val('0');
       $newDiv.find('input[name=item_offset]').val('0');
       $newDiv.find('.new_price').text('S$0.00');
+      $newDiv.find('.sub-total').text('S$0.00');
       if ($newDiv.find('.removebutton').length <= 0) {
         $newDiv.append('<button type="button" class="btn btn-danger removebutton">Delete</button>');
       };
@@ -119,19 +123,19 @@
                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
                   <label class="control-label col-md-7 col-sm-8 col-xs-12">Quotation Validity (Days) :</label>
                   <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input type="text" class="form-control" value="${quotation_validity}" data-validation="number">
+                    <input name="quotation_validity" type="number" class="form-control" value="${quotation_validity}" data-validation="number">
                   </div>
                 </div>
                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
                   <label class="control-label col-md-8 col-sm-8 col-xs-12">Maximum Days before Payment:</label>
                   <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input type="text" class="form-control" value="${payment}" data-validation="number">
+                    <input name="payment_days_allowed" type="number" class="form-control" value="${payment}" data-validation="number">
                   </div>
                 </div>
                 <div class="form-group col-md-4 col-sm-6 col-xs-12">
                   <label class="control-label col-md-9 col-sm-8 col-xs-12">Maximum Days Allowed for Delivery:</label>
                   <div class="col-md-3 col-sm-3 col-xs-12">
-                    <input type="text" class="form-control" value="${delivery}" data-validation="number">
+                    <input name="delivery_days_allowed" type="number" class="form-control" value="${delivery}" data-validation="number">
                   </div>
                 </div>
               </div>
@@ -180,7 +184,7 @@
                               </p>
                             </p>
                           </select>
-                          <input style="width: 70%" class="col-md-3 col-sm-6 col-xs-12 form-control" type="number" id="unit_price" name="item_unit_price" value="0" min="0" data-validation="number" data-validation-allowing="float" oninput="calculatePrice.call(this)" />
+                          <input style="width: 70%" class="col-md-3 col-sm-6 col-xs-12 form-control" type="number" id="unit_price" name="item_unit_price" value="0" min="0" step="any" data-validation="number" data-validation-allowing="float" oninput="calculatePrice.call(this)" />
                         </div>
                       </div>
                       <div class="form-group col-md-6 col-xs-12">
@@ -201,6 +205,12 @@
                           <label class="control-label new_price" style="float: right;">S$0.00</label>
                         </div>
                       </div>
+                      <div class="form-group col-md-9 col-xs-12" style="float: right;">
+                        <label class="control-label col-md-7 col-sm-5 col-xs-12">Subtotal:</label>
+                        <div class="col-md-5 col-sm-7 col-xs-12" style="float: right;">
+                          <label class="control-label sub-total" style="float: right;">S$0.00</label>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -211,7 +221,7 @@
           <div class="row" style="margin-bottom: 30">
             <div class="form-group">
               <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-9">
-                <label class="control-label col-md-7 col-sm-5 col-xs-12">Subtotal:</label>
+                <label class="control-label col-md-7 col-sm-5 col-xs-12">Total:</label>
                   <div class="col-md-5 col-sm-7 col-xs-12" >
                     <label id="total_price" class="control-label" >S$0.00</label>
                   </div>
