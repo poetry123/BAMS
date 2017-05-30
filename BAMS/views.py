@@ -1,6 +1,8 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from forex_python.converter import CurrencyRates
+from bson.objectid import ObjectId
+import json
 import arrow
 
 import logging
@@ -26,9 +28,9 @@ def my_view(request):
   for q in cursor:
     time_created = arrow.get(q['time_created'])
     year = time_created.year % 2000
-    q['quotation_number'] = 'QTN-%d%s' % (year, format(int(q['quotation_number']), '04d'))
-    q['time_created'] = time_created.humanize()
-    q['time_modified'] = arrow.get(q['time_modified']).humanize()
+    q['quotation_number_c'] = 'QTN-%d%s' % (year, format(int(q['quotation_number']), '04d'))
+    q['time_created_c'] = time_created.humanize()
+    q['time_modified_c'] = arrow.get(q['time_modified']).humanize()
     quotations.append(q)
   # get all quotations from database
   for qq in quotations:
@@ -37,9 +39,15 @@ def my_view(request):
 
 @view_config(route_name='quotation_new', renderer='templates/new_quotation.pt')
 def quotation_new(request):
-  quotation_validity = 30
-  delivery = 30
-  payment = 30
+  setting_doc = request.db['others'].find_one({'_id':'settings'})
+  if setting_doc == None:
+    quotation_validity = 30
+    delivery = 30
+    payment = 30
+  else:
+    quotation_validity = setting_doc['quotation_validity']
+    delivery = setting_doc['delivery_days_allowed']
+    payment = setting_doc['payment_days_allowed']
 
   currency_rate = dict()
   for code in currency_codes:
@@ -55,7 +63,27 @@ def quotation_summary(request):
 
 @view_config(route_name='settings', renderer='templates/settings.pt')
 def settings(request):
-  return {}
+  others_collection = request.db['others']
+  if request.method=='POST':
+    setting_raw = request.POST
+    print(setting_raw)
+    setting_data = {'owner': setting_raw['owner'],
+                'owner_phone': setting_raw['owner_phone'],
+                'quotation_validity': setting_raw['quotation_validity'],
+                'delivery_days_allowed': setting_raw['delivery_days_allowed'],
+                'payment_days_allowed': setting_raw['payment_days_allowed'],
+                '_id': 'settings'
+                }
+    existing_setting = others_collection.find_and_modify(query={'_id': 'settings'},
+                          update=setting_data, new=True, upsert=True)
+    print(existing_setting)
+    return {'settings': existing_setting}
+  else:
+    existing_setting = others_collection.find_one({'_id': 'settings'})
+    if(existing_setting == None):
+      return {'settings': {'delivery_days_allowed':30, 'quotation_validity':30, 'payment_days_allowed':30,'owner':'', 'owner_phone':''}}
+
+    return {'settings':existing_setting}
 
 @view_config(route_name='quotation_edit', renderer='templates/edit_form.pt')
 def quotation_edit(request):
@@ -105,3 +133,22 @@ def create_quotation(request):
     quotation_collection.insert_one(quotation)
     # Save to mongodb
     return HTTPFound(location='/')
+
+@view_config(route_name='quotation_json', renderer='json')
+def get_quotation(request):
+  if 'quotation_id' not in request.GET:
+    return {}
+  quotation_id = request.GET['quotation_id']
+  print(quotation_id)
+
+  quotation = request.db['quotations'].find_one({'_id': ObjectId(quotation_id)})
+  if quotation is None:
+    return {}
+  quotation['_id'] = str(quotation['_id'])
+
+  return quotation
+
+
+
+
+

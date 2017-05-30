@@ -38,5 +38,6 @@ def main(global_config, **settings):
     config.add_route('settings', '/settings')
     config.add_route('quotation_create', '/quotation/create')
     config.add_route('quotation_edit', '/quotation/edit/{quotation_no}')
+    config.add_route('quotation_json', 'quotation.json')
     config.scan()
     return config.make_wsgi_app()

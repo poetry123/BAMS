@@ -1,4 +1,14 @@
 <div metal:use-macro="load: layout.pt">
+<metal:slot metal:fill-slot="script">
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $.validate({
+      lang: 'en'
+    });
+  });
+</script>
+</metal:slot>
   <div metal:fill-slot="content">
       <div class="x_panel">
         <div class="x_title">
@@ -11,36 +21,36 @@
         </div>
         <div class="x_content">
           <br />
-          <form id="demo-form2" class="form-horizontal form-label-left">
+          <form id="setting-form" action="/settings" method="post" class="form-horizontal form-label-left">
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Prepared By:</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="text" class="form-control" placeholder="Wang Delu">
+                <input name="owner" type="text" class="form-control" value="${settings.owner}" data-validation="required">
               </div>
             </div>
             <div class="form-group">
               <label class="control-label col-md-3 col-sm-3 col-xs-12">Mobile Phone:</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="text" class="form-control" placeholder="9223 9189">
+                <input name="owner_phone" type="text" class="form-control" value="${settings.owner_phone}" data-validation="custom" data-validation-regexp="^(\(?\+?[0-9]*\)?)?[0-9\- ]+$" data-validation-error-msg="You have not given a correct phone number">
               </div>
             </div>
             <div class="ln_solid"></div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Quotation Validity:</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">Default Quotation Validity (Days):</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="text" class="form-control" placeholder="30 days">
+                <input name="quotation_validity" type="text" class="form-control" value="${settings.quotation_validity}" data-validation="number">
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Payment:</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">Default Maximum Days before Payment:</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="text" class="form-control" placeholder="30 days">
+                <input name="payment_days_allowed" type="text" class="form-control" value="${settings.payment_days_allowed}" data-validation="number">
               </div>
             </div>
             <div class="form-group">
-              <label class="control-label col-md-3 col-sm-3 col-xs-12">Delivery Status:</label>
+              <label class="control-label col-md-3 col-sm-3 col-xs-12">Default Maximum Days Allowed for Delivery:</label>
               <div class="col-md-9 col-sm-9 col-xs-12">
-                <input type="text" class="form-control" placeholder="4 weeks upon order confirmation">
+                <input name="delivery_days_allowed" type="text" class="form-control" value="${settings.delivery_days_allowed}" data-validation="number">
               </div>
             </div>
             <br />
@@ -49,7 +59,7 @@
               <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                 <button class="btn btn-primary" type="button">Cancel</button>
                 <button class="btn btn-primary" type="reset">Reset</button>
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="submit" class="btn btn-success">Save</button>
               </div>
             </div>
 
